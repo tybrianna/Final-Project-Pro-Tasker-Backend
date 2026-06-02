@@ -1,23 +1,40 @@
-// Depencencies
 require("dotenv").config();
-const express = require("express");
-// const movieRoutes = require("./routes/movieRoutes");
-const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Middleware
+const express = require("express");
+const cors = require("cors");
+
+const connectDB = require(
+  "./config/db"
+);
+
+connectDB();
+
+const app = express();
+
+app.use(cors());
+
 app.use(express.json());
 
-// Route
-// app.use("/api", movieRoutes);
+app.use(
+  "/api/auth",
+  require("./routes/authRoutes")
+);
 
-// Port
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.use(
+  "/api/projects",
+  require("./routes/projectRoutes")
+);
 
-jwt.sign(
-   { id:user._id },
-   process.env.JWT_SECRET,
-   { expiresIn:"7d" }
+app.use(
+  "/api/tasks",
+  require("./routes/taskRoutes")
+);
+
+const PORT =
+  process.env.PORT || 5000;
+
+app.listen(PORT, () =>
+  console.log(
+    `Server running on ${PORT}`
+  )
 );
