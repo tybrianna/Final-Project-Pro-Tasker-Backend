@@ -68,3 +68,8 @@ const loginUser = async (
       });
   }
 };
+
+module.exports = {
+  registerUser,
+  loginUser,
+};
