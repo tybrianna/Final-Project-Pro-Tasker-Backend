@@ -16,3 +16,8 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+jwt.sign(
+   { id:user._id },
+   process.env.JWT_SECRET,
+   { expiresIn:"7d" }
+);
