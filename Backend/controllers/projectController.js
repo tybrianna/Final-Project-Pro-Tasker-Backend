@@ -16,3 +16,20 @@ const createProject = async (
 
   res.status(201).json(project);
 };
+
+const getProjects = async (
+  req,
+  res
+) => {
+  const projects =
+    await Project.find({
+      owner: req.user._id,
+    });
+
+  res.json(projects);
+};
+
+module.exports = {
+  createProject,
+  getProjects,
+};
