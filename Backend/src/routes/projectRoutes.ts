@@ -5,7 +5,7 @@ import {
   getProjectById,
   updateProject,
   deleteProject,
-} from "../controllers/projectController";
+} from "../controllers/projectControllers";
 
 import { protect } from "../middleware/authMiddleware";
 

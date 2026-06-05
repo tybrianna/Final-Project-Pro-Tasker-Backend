@@ -4,7 +4,7 @@ import {
   getTasksByProject,
   updateTask,
   deleteTask,
-} from "../controllers/taskController";
+} from "../controllers/taskControllers";
 
 import { protect } from "../middleware/authMiddleware";
 

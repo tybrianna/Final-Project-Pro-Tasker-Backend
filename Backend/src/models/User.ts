@@ -1,4 +1,5 @@
 import mongoose, {
+  CallbackError,
   Document,
   Model,
   Schema,
@@ -41,23 +42,13 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-userSchema.pre(
-  "save",
-  async function (next) {
-    if (
-      !this.isModified("password")
-    )
-      return next();
-
-    this.password =
-      await bcrypt.hash(
-        this.password,
-        10
-      );
-
-    next();
+userSchema.pre<IUser>("save", async function (this: IUser) {
+  if (!this.isModified("password")) {
+    return;
   }
-);
+
+  this.password = await bcrypt.hash(this.password, 10);
+});
 
 userSchema.methods.matchPassword =
   async function (
