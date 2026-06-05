@@ -5,7 +5,7 @@ import Project from "../models/Project";
 // CREATE TASK
 export const createTask = async (req: any, res: Response) => {
   try {
-    const { title, description, type, projectId } = req.body;
+    const { title, description, type, projectId, dueDate } = req.body;
 
     const project = await Project.findById(projectId);
 
@@ -23,9 +23,24 @@ export const createTask = async (req: any, res: Response) => {
       description,
       type,
       project: projectId,
+      dueDate,
     });
 
     res.status(201).json(task);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// GET ALL TASKS FOR USER
+export const getAllTasks = async (req: any, res: Response) => {
+  try {
+    const projects = await Project.find({ owner: req.user._id });
+    const projectIds = projects.map((p) => p._id);
+
+    const tasks = await Task.find({ project: { $in: projectIds } }).populate("project");
+
+    res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -71,6 +86,7 @@ export const updateTask = async (req: any, res: Response) => {
     task.description = req.body.description || task.description;
     task.status = req.body.status || task.status;
     task.type = req.body.type || task.type;
+    task.dueDate = req.body.dueDate || task.dueDate;
 
     const updated = await task.save();
 

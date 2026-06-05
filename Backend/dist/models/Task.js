@@ -57,5 +57,8 @@ const taskSchema = new mongoose_1.Schema({
         ref: "Project",
         required: true,
     },
+    dueDate: {
+        type: Date,
+    },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Task", taskSchema);

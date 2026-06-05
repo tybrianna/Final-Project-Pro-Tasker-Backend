@@ -7,6 +7,8 @@ const express_1 = __importDefault(require("express"));
 const taskControllers_1 = require("../controllers/taskControllers");
 const authMiddleware_1 = require("../middleware/authMiddleware");
 const router = express_1.default.Router();
+// GET ALL TASKS FOR USER
+router.get("/", authMiddleware_1.protect, taskControllers_1.getAllTasks);
 // CREATE TASK
 router.post("/", authMiddleware_1.protect, taskControllers_1.createTask);
 // GET TASKS FOR A PROJECT

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createTask,
+  getAllTasks,
   getTasksByProject,
   updateTask,
   deleteTask,
@@ -9,6 +10,9 @@ import {
 import { protect } from "../middleware/authMiddleware";
 
 const router = express.Router();
+
+// GET ALL TASKS FOR USER
+router.get("/", protect, getAllTasks);
 
 // CREATE TASK
 router.post("/", protect, createTask);

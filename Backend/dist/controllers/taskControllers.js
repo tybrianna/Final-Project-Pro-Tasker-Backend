@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTask = exports.updateTask = exports.getTasksByProject = exports.createTask = void 0;
+exports.deleteTask = exports.updateTask = exports.getTasksByProject = exports.getAllTasks = exports.createTask = void 0;
 const Task_1 = __importDefault(require("../models/Task"));
 const Project_1 = __importDefault(require("../models/Project"));
 // CREATE TASK
 const createTask = async (req, res) => {
     try {
-        const { title, description, type, projectId } = req.body;
+        const { title, description, type, projectId, dueDate } = req.body;
         const project = await Project_1.default.findById(projectId);
         if (!project) {
             return res.status(404).json({ message: "Project not found" });
@@ -23,6 +23,7 @@ const createTask = async (req, res) => {
             description,
             type,
             project: projectId,
+            dueDate,
         });
         res.status(201).json(task);
     }
@@ -31,6 +32,19 @@ const createTask = async (req, res) => {
     }
 };
 exports.createTask = createTask;
+// GET ALL TASKS FOR USER
+const getAllTasks = async (req, res) => {
+    try {
+        const projects = await Project_1.default.find({ owner: req.user._id });
+        const projectIds = projects.map((p) => p._id);
+        const tasks = await Task_1.default.find({ project: { $in: projectIds } }).populate("project");
+        res.json(tasks);
+    }
+    catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+};
+exports.getAllTasks = getAllTasks;
 const getTasksByProject = async (req, res) => {
     try {
         const project = await Project_1.default.findById(req.params.projectId);
@@ -64,6 +78,7 @@ const updateTask = async (req, res) => {
         task.description = req.body.description || task.description;
         task.status = req.body.status || task.status;
         task.type = req.body.type || task.type;
+        task.dueDate = req.body.dueDate || task.dueDate;
         const updated = await task.save();
         res.json(updated);
     }

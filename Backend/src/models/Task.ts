@@ -9,6 +9,7 @@ export interface ITask extends Document {
   type: "Feature" | "Bug" | "Improvement" | "Research";
 
   project: mongoose.Types.ObjectId;
+  dueDate?: Date;
 }
 
 const taskSchema = new Schema<ITask>(
@@ -38,6 +39,10 @@ const taskSchema = new Schema<ITask>(
       type: Schema.Types.ObjectId,
       ref: "Project",
       required: true,
+    },
+
+    dueDate: {
+      type: Date,
     },
   },
   { timestamps: true }
