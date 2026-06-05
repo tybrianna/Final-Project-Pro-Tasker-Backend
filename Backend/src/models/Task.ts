@@ -1,88 +1,46 @@
-import mongoose, {
-  Schema,
-  Document,
-  Model,
-} from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-export interface ITask
-  extends Document {
+export interface ITask extends Document {
   title: string;
-
   description: string;
 
-  status:
-    | "To Do"
-    | "In Progress"
-    | "Done"
-    | "Blocked";
+  status: "To Do" | "In Progress" | "Done" | "Blocked";
 
-  type:
-    | "Feature"
-    | "Bug"
-    | "Improvement"
-    | "Research";
+  type: "Feature" | "Bug" | "Improvement" | "Research";
 
-  project:
-    mongoose.Types.ObjectId;
+  project: mongoose.Types.ObjectId;
 }
 
-const taskSchema =
-  new Schema<ITask>(
-    {
-      title: {
-        type: String,
-        required: true,
-      },
-
-      description: {
-        type: String,
-      },
-
-      status: {
-        type: String,
-
-        enum: [
-          "To Do",
-          "In Progress",
-          "Done",
-          "Blocked",
-        ],
-
-        default: "To Do",
-      },
-
-      type: {
-        type: String,
-
-        enum: [
-          "Feature",
-          "Bug",
-          "Improvement",
-          "Research",
-        ],
-
-        default: "Feature",
-      },
-
-      project: {
-        type:
-          Schema.Types.ObjectId,
-
-        ref: "Project",
-
-        required: true,
-      },
+const taskSchema = new Schema<ITask>(
+  {
+    title: {
+      type: String,
+      required: true,
     },
 
-    {
-      timestamps: true,
-    }
-  );
+    description: {
+      type: String,
+    },
 
-const Task: Model<ITask> =
-  mongoose.model<ITask>(
-    "Task",
-    taskSchema
-  );
+    status: {
+      type: String,
+      enum: ["To Do", "In Progress", "Done", "Blocked"],
+      default: "To Do",
+    },
 
-export default Task;
+    type: {
+      type: String,
+      enum: ["Feature", "Bug", "Improvement", "Research"],
+      default: "Feature",
+    },
+
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model<ITask>("Task", taskSchema);
