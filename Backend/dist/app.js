@@ -9,7 +9,12 @@ const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const projectRoutes_1 = __importDefault(require("./routes/projectRoutes"));
 const taskRoutes_1 = __importDefault(require("./routes/taskRoutes"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: process.env.FRONTEND_URL || "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
+app.options("*", (0, cors_1.default)());
 app.use(express_1.default.json());
 app.use("/api/auth", authRoutes_1.default);
 app.use("/api/projects", projectRoutes_1.default);

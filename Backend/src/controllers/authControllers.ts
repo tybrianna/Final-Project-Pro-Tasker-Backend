@@ -31,6 +31,7 @@ export const registerUser = async (
       token: generateToken(user._id.toString()),
     });
   } catch (error) {
+    console.error("Register error:", error);
     res.status(500).json({
       message: "Server error",
     });
@@ -68,6 +69,7 @@ export const loginUser = async (
       token: generateToken(user._id.toString()),
     });
   } catch (error) {
+    console.error("Login error:", error);
     res.status(500).json({
       message: "Server error",
     });
